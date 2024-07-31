@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 class Libro
 {
@@ -7,11 +9,11 @@ class Libro
     public decimal Precio { get; set; }
     public int Stock { get; set; }
 
-    public Libro(string nombre, decimal precio, int disponible)
+    public Libro(string nombre, decimal precio, int stock)
     {
         Nombre = nombre;
         Precio = precio;
-        Stock = disponible;
+        Stock = stock;
     }
 }
 
@@ -19,31 +21,26 @@ class Biblioteca
 {
     List<Producto> productos = new List<Producto>();
 
-    public void agregar(string nombre, decimal precio, int disponible)
+    public void AgregarProducto(string nombre, decimal precio, int stock)
     {
-        productos.Add(new Producto(titulo, autor));
-        Console.WriteLine("Libro agregado a la biblioteca.");
+        productos.Add(new Producto(nombre, precio, stock));
+        Console.WriteLine("Producto agregado al inventario.");
     }
 
     public void disponibles()
     {
         Console.Clear();
-        Console.WriteLine("Libros disponibles en la biblioteca:");
-        foreach (var libro in libros)
-        {
-            if (libro.disponible)
-            {
-                Console.WriteLine($"Título: {libro.Título}\n Autor: {libro.Autor}");
-                Console.WriteLine();
-            }
-        }
+        Console.WriteLine($"Nombre: {Nombre}");
+        Console.WriteLine($"Precio: {Precio:C}");
+        Console.WriteLine($"Stock: {Stock}");
     }
+
 
     public void buscartitulo(string titulo)
     {
         Console.Clear();
         bool encontrado = false;
-        foreach (var libro in libros)
+        foreach (var libro in productos)
         {
             if (libro.Título.ToLower() == titulo.ToLower())
             {
@@ -61,7 +58,7 @@ class Biblioteca
     public void prestar(string titulo)
     {
         Console.Clear();
-        foreach (var libro in libros)
+        foreach (var libro in productos)
         {
             if (libro.Título.ToLower() == titulo.ToLower() && libro.disponible)
             {
@@ -76,7 +73,7 @@ class Biblioteca
     public void devolver(string titulo)
     {
         Console.Clear();
-        foreach (var libro in libros)
+        foreach (var libro in productos)
         {
             if (libro.Título.ToLower() == titulo.ToLower() && !libro.disponible)
             {
