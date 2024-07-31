@@ -151,10 +151,10 @@ class Program
             Console.WriteLine("Opciones");
             Console.WriteLine("1. Agregar un nuevo producto a la tienda (crearlo)");
             Console.WriteLine("2. Información");
-            Console.WriteLine("3. Reabastecer");
-            Console.WriteLine("4. Actualizar");
-            Console.WriteLine("5. Resumen del producto");
-            Console.WriteLine("6. Actualizar precio de un libro");
+            Console.WriteLine("3. Vender");
+            Console.WriteLine("4. Reabastecer");
+            Console.WriteLine("5. Actualizar (precio)");
+            Console.WriteLine("6. Resumen");
             Console.WriteLine("7. Salir");
 
             Console.Write("Ingrese el número de la opción que desea realizar: ");
@@ -170,53 +170,51 @@ class Program
                 case 1:
                     Console.Clear();
                     Console.Write("Ingrese el nombre del producto: ");
-                    string titulo = Console.ReadLine();
-                    Console.Write("Ingrese el precio del libro: ");
+                    string nombre = Console.ReadLine();
+                    Console.Write("Ingrese el precio del producto: ");
                     decimal precio = decimal.Parse(Console.ReadLine());
-                    Console.Write("Ingrese el stock del libro: ");
+                    Console.Write("Ingrese el stock del producto: ");
                     int stock = int.Parse(Console.ReadLine());
-                    biblioteca.AgregarProducto(titulo, precio, stock);
+                    biblioteca.AgregarProducto(nombre, precio, stock);
                     break;
                 case 2:
                     biblioteca.Disponibles();
                     break;
                 case 3:
                     Console.Clear();
-                    Console.Write("Ingrese el título del libro que desea buscar: ");
-                    string tituloBuscar = Console.ReadLine();
-                    biblioteca.ConsultarInfoProducto(tituloBuscar);
-                    break;
-                case 4:
-                    Console.Clear();
-                    Console.Write("Ingrese el título del libro que desea vender: ");
+                    Console.Write("Ingrese el nombre del producto que desea vender: ");
                     string tituloVender = Console.ReadLine();
                     Console.Write("Ingrese la cantidad que desea vender: ");
                     int cantidadVender = int.Parse(Console.ReadLine());
                     biblioteca.Vender(tituloVender, cantidadVender);
                     break;
+
+                case 4:
+                    Console.Clear();
+                    Console.Write("Ingrese el nombre del producto: ");
+                    string nombreReabastecimiento = Console.ReadLine();
+                    Console.Write("Ingrese la cantidad a reabastecer: ");
+                    int cantidadReabastecimiento = int.Parse(Console.ReadLine());
+                    biblioteca.ReabastecerProducto(nombreReabastecimiento, cantidadReabastecimiento);
+                    break;
+                    break;
+
                 case 5:
                     Console.Clear();
-                    Console.Write("Ingrese el título del libro que desea reabastecer: ");
-                    string tituloReabastecer = Console.ReadLine();
-                    Console.Write("Ingrese la cantidad que desea reabastecer: ");
-                    int cantidadReabastecer = int.Parse(Console.ReadLine());
-                    biblioteca.ReabastecerProducto(tituloReabastecer, cantidadReabastecer);
-                    break;
-                case 6:
-                    Console.Clear();
-                    Console.Write("Ingrese el título del libro cuyo precio desea actualizar: ");
+                    Console.Write("Ingrese el nombrroducto cuyo precio desea actualizar: ");
                     string tituloActualizar = Console.ReadLine();
                     Console.Write("Ingrese el nuevo precio: ");
                     decimal nuevoPrecio = decimal.Parse(Console.ReadLine());
-                    biblioteca.ActualizarPrecio(tituloActualizar, nuevoPrecio);
+                   
                     break;
-                case 7:
+                case 6:
                     Console.Clear();
-                    Console.Write("Ingrese el título del libro cuyo resumen desea mostrar: ");
+                    Console.Write("Ingrese el nombre del producto cuyo resumen desea mostrar: ");
                     string tituloResumen = Console.ReadLine();
                     biblioteca.MostrarResumenProducto(tituloResumen);
                     break;
-                case 8:
+
+                case 7:
                     Console.Clear();
                     Console.WriteLine("Programa terminado. ¡Gracias!");
                     Environment.Exit(0);
