@@ -3,25 +3,25 @@ using System.Collections.Generic;
 
 class Libro
 {
-    public string Título { get; set; }
-    public string Autor { get; set; }
-    public bool disponible { get; set; }
+    public string Nombre { get; set; }
+    public decimal Precio { get; set; }
+    public int Stock { get; set; }
 
-    public Libro(string titulo, string autor)
+    public Libro(string nombre, decimal precio, int disponible)
     {
-        Título = titulo;
-        Autor = autor;
-        disponible = true;
+        Nombre = nombre;
+        Precio = precio;
+        Stock = disponible;
     }
 }
 
 class Biblioteca
 {
-    List<Libro> libros = new List<Libro>();
+    List<Producto> productos = new List<Producto>();
 
-    public void agregar(string titulo, string autor)
+    public void agregar(string nombre, decimal precio, int disponible)
     {
-        libros.Add(new Libro(titulo, autor));
+        productos.Add(new Producto(titulo, autor));
         Console.WriteLine("Libro agregado a la biblioteca.");
     }
 
