@@ -34,7 +34,7 @@ class Biblioteca
         }
     }
 
-    public void VenderProducto(string nombre, int cantidad)
+    public void Vender(string nombre, int cantidad)
     {
         var producto = productos.Find(p => p.Nombre.ToLower() == nombre.ToLower());
         if (producto != null)
@@ -60,7 +60,7 @@ class Biblioteca
         }
     }
 
-    public void ActualizarPrecioProducto(string nombre, decimal nuevoPrecio)
+    public void ActualizarPrecio(string nombre, decimal nuevoPrecio)
     {
         var producto = productos.Find(p => p.Nombre.ToLower() == nombre.ToLower());
         if (producto != null)
@@ -87,6 +87,57 @@ class Biblioteca
     }
 }
 
+class Libro
+{
+    public string Nombre { get; set; }
+    public decimal Precio { get; set; }
+    public int Stock { get; set; }
+
+    public Libro(string nombre, decimal precio, int stock)
+    {
+        Nombre = nombre;
+        Precio = precio;
+        Stock = stock;
+    }
+
+    public void ConsultarInfo()
+    {
+        Console.WriteLine($"Nombre: {Nombre}");
+        Console.WriteLine($"Precio: {Precio:C}");
+        Console.WriteLine($"Stock: {Stock}");
+    }
+
+    public void Vender(int cantidad)
+    {
+        if (Stock >= cantidad)
+        {
+            Stock -= cantidad;
+            Console.WriteLine($"Se vendieron {cantidad} unidades de {Nombre}.");
+        }
+        else
+        {
+            Console.WriteLine("No hay suficiente stock disponible.");
+        }
+    }
+
+    public void Reabastecer(int cantidad)
+    {
+        Stock += cantidad;
+        Console.WriteLine($"Se reabastecieron {cantidad} unidades de {Nombre}.");
+    }
+
+    public void ActualizarPrecio(decimal nuevoPrecio)
+    {
+        Precio = nuevoPrecio;
+        Console.WriteLine($"El precio de {Nombre} se actualizó a {Precio:C}.");
+    }
+
+    public void MostrarResumen()
+    {
+        ConsultarInfo();
+    }
+}
+
 
 
 class Program
@@ -98,14 +149,13 @@ class Program
         {
             Console.Clear();
             Console.WriteLine("Opciones");
-            Console.WriteLine("1. Agregar un nuevo libro a la biblioteca");
-            Console.WriteLine("2. Mostrar todos los libros disponibles");
-            Console.WriteLine("3. Buscar un libro por su título");
-            Console.WriteLine("4. Vender un libro");
-            Console.WriteLine("5. Reabastecer un libro");
+            Console.WriteLine("1. Agregar un nuevo producto a la tienda (crearlo)");
+            Console.WriteLine("2. Información");
+            Console.WriteLine("3. Reabastecer");
+            Console.WriteLine("4. Actualizar");
+            Console.WriteLine("5. Resumen del producto");
             Console.WriteLine("6. Actualizar precio de un libro");
-            Console.WriteLine("7. Mostrar resumen de un libro");
-            Console.WriteLine("8. Salir");
+            Console.WriteLine("7. Salir");
 
             Console.Write("Ingrese el número de la opción que desea realizar: ");
             int opcion;
@@ -119,7 +169,7 @@ class Program
             {
                 case 1:
                     Console.Clear();
-                    Console.Write("Ingrese el título del libro: ");
+                    Console.Write("Ingrese el nombre del producto: ");
                     string titulo = Console.ReadLine();
                     Console.Write("Ingrese el precio del libro: ");
                     decimal precio = decimal.Parse(Console.ReadLine());
@@ -142,7 +192,7 @@ class Program
                     string tituloVender = Console.ReadLine();
                     Console.Write("Ingrese la cantidad que desea vender: ");
                     int cantidadVender = int.Parse(Console.ReadLine());
-                    biblioteca.VenderProducto(tituloVender, cantidadVender);
+                    biblioteca.Vender(tituloVender, cantidadVender);
                     break;
                 case 5:
                     Console.Clear();
@@ -158,7 +208,7 @@ class Program
                     string tituloActualizar = Console.ReadLine();
                     Console.Write("Ingrese el nuevo precio: ");
                     decimal nuevoPrecio = decimal.Parse(Console.ReadLine());
-                    biblioteca.ActualizarPrecioProducto(tituloActualizar, nuevoPrecio);
+                    biblioteca.ActualizarPrecio(tituloActualizar, nuevoPrecio);
                     break;
                 case 7:
                     Console.Clear();
