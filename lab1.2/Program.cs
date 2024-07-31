@@ -1,94 +1,97 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
-class Libro
-{
-    public string Nombre { get; set; }
-    public decimal Precio { get; set; }
-    public int Stock { get; set; }
-
-    public Libro(string nombre, decimal precio, int stock)
-    {
-        Nombre = nombre;
-        Precio = precio;
-        Stock = stock;
-    }
-}
 
 class Biblioteca
 {
-    List<Producto> productos = new List<Producto>();
+    List<Libro> productos = new List<Libro>();
 
     public void AgregarProducto(string nombre, decimal precio, int stock)
     {
-        productos.Add(new Producto(nombre, precio, stock));
+        productos.Add(new Libro(nombre, precio, stock));
         Console.WriteLine("Producto agregado al inventario.");
     }
 
-    public void disponibles()
+    public void Disponibles()
     {
         Console.Clear();
-        Console.WriteLine($"Nombre: {Nombre}");
-        Console.WriteLine($"Precio: {Precio:C}");
-        Console.WriteLine($"Stock: {Stock}");
-    }
-
-
-    public void buscartitulo(string titulo)
-    {
-        Console.Clear();
-        bool encontrado = false;
-        foreach (var libro in productos)
+        foreach (var producto in productos)
         {
-            if (libro.Título.ToLower() == titulo.ToLower())
-            {
-                Console.WriteLine($"Título: {libro.Título}\n Autor: {libro.Autor} \n Estado: {(libro.disponible ? "Disponible" : "Prestado")}");
-                encontrado = true;
-                break;
-            }
-        }
-        if (!encontrado)
-        {
-            Console.WriteLine("Libro no encontrado.");
+            producto.ConsultarInfo();
+            Console.WriteLine();
         }
     }
 
-    public void prestar(string titulo)
+    public void ConsultarInfoProducto(string nombre)
     {
-        Console.Clear();
-        foreach (var libro in productos)
+        var producto = productos.Find(p => p.Nombre.ToLower() == nombre.ToLower());
+        if (producto != null)
         {
-            if (libro.Título.ToLower() == titulo.ToLower() && libro.disponible)
-            {
-                libro.disponible = false;
-                Console.WriteLine("Libro prestado correctamente.");
-                return;
-            }
+            producto.ConsultarInfo();
         }
-        Console.WriteLine("Libro no encontrado o ya prestado.");
+        else
+        {
+            Console.WriteLine("Producto no encontrado.");
+        }
     }
 
-    public void devolver(string titulo)
+    public void VenderProducto(string nombre, int cantidad)
     {
-        Console.Clear();
-        foreach (var libro in productos)
+        var producto = productos.Find(p => p.Nombre.ToLower() == nombre.ToLower());
+        if (producto != null)
         {
-            if (libro.Título.ToLower() == titulo.ToLower() && !libro.disponible)
-            {
-                libro.disponible = true;
-                Console.WriteLine("Libro devuelto correctamente.");
-                return;
-            }
+            producto.Vender(cantidad);
         }
-        Console.WriteLine("Libro no encontrado o no prestado.");
+        else
+        {
+            Console.WriteLine("Producto no encontrado.");
+        }
+    }
+
+    public void ReabastecerProducto(string nombre, int cantidad)
+    {
+        var producto = productos.Find(p => p.Nombre.ToLower() == nombre.ToLower());
+        if (producto != null)
+        {
+            producto.Reabastecer(cantidad);
+        }
+        else
+        {
+            Console.WriteLine("Producto no encontrado.");
+        }
+    }
+
+    public void ActualizarPrecioProducto(string nombre, decimal nuevoPrecio)
+    {
+        var producto = productos.Find(p => p.Nombre.ToLower() == nombre.ToLower());
+        if (producto != null)
+        {
+            producto.ActualizarPrecio(nuevoPrecio);
+        }
+        else
+        {
+            Console.WriteLine("Producto no encontrado.");
+        }
+    }
+
+    public void MostrarResumenProducto(string nombre)
+    {
+        var producto = productos.Find(p => p.Nombre.ToLower() == nombre.ToLower());
+        if (producto != null)
+        {
+            producto.MostrarResumen();
+        }
+        else
+        {
+            Console.WriteLine("Producto no encontrado.");
+        }
     }
 }
 
+
+
 class Program
 {
-    static void menu()
+    static void Menu()
     {
         Biblioteca biblioteca = new Biblioteca();
         do
@@ -98,15 +101,17 @@ class Program
             Console.WriteLine("1. Agregar un nuevo libro a la biblioteca");
             Console.WriteLine("2. Mostrar todos los libros disponibles");
             Console.WriteLine("3. Buscar un libro por su título");
-            Console.WriteLine("4. Prestar un libro a un usuario");
-            Console.WriteLine("5. Devolver un libro prestado");
-            Console.WriteLine("6. Salir");
+            Console.WriteLine("4. Vender un libro");
+            Console.WriteLine("5. Reabastecer un libro");
+            Console.WriteLine("6. Actualizar precio de un libro");
+            Console.WriteLine("7. Mostrar resumen de un libro");
+            Console.WriteLine("8. Salir");
 
             Console.Write("Ingrese el número de la opción que desea realizar: ");
             int opcion;
-            while (!int.TryParse(Console.ReadLine(), out opcion) || opcion < 1 || opcion > 6)
+            while (!int.TryParse(Console.ReadLine(), out opcion) || opcion < 1 || opcion > 8)
             {
-                Console.WriteLine("Opción no válida. Ingrese un número del 1 al 6.");
+                Console.WriteLine("Opción no válida. Ingrese un número del 1 al 8.");
                 Console.Write("Ingrese el número de la opción que desea realizar: ");
             }
 
@@ -116,34 +121,54 @@ class Program
                     Console.Clear();
                     Console.Write("Ingrese el título del libro: ");
                     string titulo = Console.ReadLine();
-                    Console.Write("Ingrese el autor del libro: ");
-                    string autor = Console.ReadLine();
-                    biblioteca.agregar(titulo, autor);
+                    Console.Write("Ingrese el precio del libro: ");
+                    decimal precio = decimal.Parse(Console.ReadLine());
+                    Console.Write("Ingrese el stock del libro: ");
+                    int stock = int.Parse(Console.ReadLine());
+                    biblioteca.AgregarProducto(titulo, precio, stock);
                     break;
                 case 2:
-                    biblioteca.disponibles();
+                    biblioteca.Disponibles();
                     break;
                 case 3:
                     Console.Clear();
                     Console.Write("Ingrese el título del libro que desea buscar: ");
                     string tituloBuscar = Console.ReadLine();
-                    biblioteca.buscartitulo(tituloBuscar);
+                    biblioteca.ConsultarInfoProducto(tituloBuscar);
                     break;
                 case 4:
                     Console.Clear();
-                    Console.Write("Ingrese el título del libro que desea prestar: ");
-                    string tituloPrestar = Console.ReadLine();
-                    biblioteca.prestar(tituloPrestar);
+                    Console.Write("Ingrese el título del libro que desea vender: ");
+                    string tituloVender = Console.ReadLine();
+                    Console.Write("Ingrese la cantidad que desea vender: ");
+                    int cantidadVender = int.Parse(Console.ReadLine());
+                    biblioteca.VenderProducto(tituloVender, cantidadVender);
                     break;
                 case 5:
                     Console.Clear();
-                    Console.Write("Ingrese el título del libro que desea devolver: ");
-                    string tituloDevolver = Console.ReadLine();
-                    biblioteca.devolver(tituloDevolver);
+                    Console.Write("Ingrese el título del libro que desea reabastecer: ");
+                    string tituloReabastecer = Console.ReadLine();
+                    Console.Write("Ingrese la cantidad que desea reabastecer: ");
+                    int cantidadReabastecer = int.Parse(Console.ReadLine());
+                    biblioteca.ReabastecerProducto(tituloReabastecer, cantidadReabastecer);
                     break;
                 case 6:
                     Console.Clear();
-                    Console.WriteLine("Programa terminado.  ¡Gracias!");
+                    Console.Write("Ingrese el título del libro cuyo precio desea actualizar: ");
+                    string tituloActualizar = Console.ReadLine();
+                    Console.Write("Ingrese el nuevo precio: ");
+                    decimal nuevoPrecio = decimal.Parse(Console.ReadLine());
+                    biblioteca.ActualizarPrecioProducto(tituloActualizar, nuevoPrecio);
+                    break;
+                case 7:
+                    Console.Clear();
+                    Console.Write("Ingrese el título del libro cuyo resumen desea mostrar: ");
+                    string tituloResumen = Console.ReadLine();
+                    biblioteca.MostrarResumenProducto(tituloResumen);
+                    break;
+                case 8:
+                    Console.Clear();
+                    Console.WriteLine("Programa terminado. ¡Gracias!");
                     Environment.Exit(0);
                     break;
             }
@@ -158,8 +183,9 @@ class Program
 
         } while (true);
     }
+
     static void Main(string[] args)
     {
-        menu();
+        Menu();
     }
 }
